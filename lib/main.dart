@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Physical Auth',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Physical Auth'),
     );
   }
 }
@@ -95,21 +95,32 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+            Container(
+              margin: const EdgeInsets.all(10),
+              child: Image.network("https://i.ibb.co/ynPmwsD/Physical-Auth-Logo.png")),
+            Container(
+                margin: const EdgeInsets.only(left: 10,right: 10),
+            child: const TextField(
+              decoration: InputDecoration(hintText: "Name"),
+            )),
+            Container(
+                margin: const EdgeInsets.only(left: 10,right: 10),
+                child: const TextField(
+                  decoration: InputDecoration(hintText: "Secret Key"),
+                )),
+            Container(
+                margin: const EdgeInsets.only(left: 10,right: 10),
+                child: const TextField(
+                  decoration: InputDecoration(hintText: "Digit Count"),
+                )),
+            Container(
+            margin: const EdgeInsets.all(10),
+            child: ElevatedButton(onPressed: () {},
+                child: const Text("Save Secret Key")
+                  )),
+            ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
