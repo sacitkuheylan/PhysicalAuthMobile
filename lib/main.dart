@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,6 +15,41 @@ Future<User> fetchData() async {
     throw Exception('Failed to load user');
   }
 }
+
+Future<SecretKeyDetail> fetchKeyData() async {
+  final response = await http.get(Uri.parse('http://192.168.2.85:5000/api/tokens?id=1'));
+
+  if (response.statusCode == 200) {
+    // If the server did return a 200 OK response,
+    // then parse the JSON.
+
+    return SecretKeyDetail.fromJson(jsonDecode(response.body));
+  } else {
+    // If the server did not return a 200 OK response,
+    // then throw an exception.
+    throw Exception('Failed to load key');
+  }
+}
+
+Future<SecretKeyDetail> sendSecretKey(
+    String name, String secretKey, int digitCount) async {
+  final http.Response response = await http.post(Uri.parse('http://192.168.2.85:5000/api/tokens'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      'secretKey': secretKey,
+      'name': name,
+      'digitCount': digitCount.toString()
+    }),
+  );
+  if (response.statusCode == 201) {
+    return SecretKeyDetail.fromJson(json.decode(response.body));
+  } else {
+    throw Exception('Failed to load data');
+  }
+}
+
 
 void main() {
   runApp(const MyApp());
@@ -81,14 +115,39 @@ class User {
   }
 }
 
+class SecretKeyDetail {
+  final String name;
+  final String secretKey;
+  final int digitCount;
+
+  const SecretKeyDetail({
+    required this.name,
+    required this.secretKey,
+    required this.digitCount,
+  });
+
+  factory SecretKeyDetail.fromJson(Map<String, dynamic> json) {
+    return SecretKeyDetail(
+      name: json['name'],
+      secretKey: json['secretKey'],
+      digitCount: json['digitCount'],
+    );
+  }
+}
+
+void postKeyData() {
+
+}
+
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   late Future<User> newUser;
+  late Future<SecretKeyDetail> keyDetail;
 
   @override
   void initState() {
     super.initState();
-    newUser = fetchData();
+    keyDetail = fetchKeyData();
   }
 
   void _incrementCounter() {
@@ -110,6 +169,9 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+    final nameController = TextEditingController();
+    final secretKeyController = TextEditingController();
+    final digitCountController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -128,24 +190,40 @@ class _MyHomePageState extends State<MyHomePage> {
                     "https://i.ibb.co/ynPmwsD/Physical-Auth-Logo.png")),
             Container(
                 margin: const EdgeInsets.only(left: 10, right: 10),
-                child: const TextField(
+                child: TextField(
+                  controller: nameController,
                   decoration: InputDecoration(hintText: "Name"),
                 )),
             Container(
                 margin: const EdgeInsets.only(left: 10, right: 10),
-                child: const TextField(
+                child: TextField(
+                  controller: secretKeyController,
                   decoration: InputDecoration(hintText: "Secret Key"),
                 )),
             Container(
                 margin: const EdgeInsets.only(left: 10, right: 10),
-                child: const TextField(
+                child: TextField(
+                  controller: digitCountController,
                   decoration: InputDecoration(hintText: "Digit Count"),
                 )),
-            FutureBuilder<User>(
-                future: newUser,
+            FloatingActionButton(onPressed: () async {
+              final http.Response response = await http.post(Uri.parse('http://192.168.2.85:5000/api/tokens'),
+                headers: <String, String>{
+                  'Content-Type': 'application/json; charset=UTF-8',
+                },
+                body: jsonEncode(<String, String>{
+                  'secretKey': secretKeyController.text,
+                  'name': nameController.text,
+                  'digitCount': digitCountController.text
+                }),
+              );
+            }
+            ),
+            FutureBuilder<SecretKeyDetail>(
+                future: keyDetail,
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    return Text(snapshot.data!.name + "\n" + snapshot.data!.email);
+                    return Text(snapshot.data!.name + "\n" + snapshot.data!.secretKey + "\n" + snapshot.data!.digitCount.toString());
                   } else if (snapshot.hasError) {
                     return Text('${snapshot.error}');
                   }
