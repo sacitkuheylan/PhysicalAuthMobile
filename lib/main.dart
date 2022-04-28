@@ -75,14 +75,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Physical Auth'),
+      home: MyHomePage(title: 'Physical Auth'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
+  MyHomePage({Key? key, required this.title}) : super(key: key);
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
@@ -96,8 +95,8 @@ class MyHomePage extends StatefulWidget {
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
-}
 
+}
 class User {
   final String name;
   final String email;
@@ -135,12 +134,17 @@ class SecretKeyDetail {
   }
 }
 
+class Device {
+  final String devipAddress;
+
+  const Device({required this.devipAddress});
+}
+
 void postKeyData() {
 
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   late Future<User> newUser;
   late Future<SecretKeyDetail> keyDetail;
 
@@ -148,17 +152,6 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     keyDetail = fetchKeyData();
-  }
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
   }
 
   @override
@@ -189,24 +182,24 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Image.network(
                     "https://i.ibb.co/ynPmwsD/Physical-Auth-Logo.png")),
             Container(
-                margin: const EdgeInsets.only(left: 10, right: 10),
+                margin: const EdgeInsets.only(left: 25, right: 25),
                 child: TextField(
                   controller: nameController,
-                  decoration: InputDecoration(hintText: "Name"),
+                  decoration: const InputDecoration(hintText: "Name"),
                 )),
             Container(
-                margin: const EdgeInsets.only(left: 10, right: 10),
+                margin: const EdgeInsets.only(left: 25, right: 25),
                 child: TextField(
                   controller: secretKeyController,
-                  decoration: InputDecoration(hintText: "Secret Key"),
+                  decoration: const InputDecoration(hintText: "Secret Key"),
                 )),
             Container(
-                margin: const EdgeInsets.only(left: 10, right: 10),
+                margin: const EdgeInsets.only(left: 25, right: 25),
                 child: TextField(
                   controller: digitCountController,
-                  decoration: InputDecoration(hintText: "Digit Count"),
+                  decoration: const InputDecoration(hintText: "Digit Count"),
                 )),
-            FloatingActionButton(onPressed: () async {
+            ElevatedButton(onPressed: () async {
               final http.Response response = await http.post(Uri.parse('http://192.168.2.85:5000/api/tokens'),
                 headers: <String, String>{
                   'Content-Type': 'application/json; charset=UTF-8',
@@ -217,7 +210,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   'digitCount': digitCountController.text
                 }),
               );
-            }
+            },
+            child: const Text('Add new token'),
             ),
             FutureBuilder<SecretKeyDetail>(
                 future: keyDetail,
