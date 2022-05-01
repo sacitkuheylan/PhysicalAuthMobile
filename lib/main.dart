@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:physical_auth/token_list.dart';
 
 Future<SecretKeyDetail> fetchKeyData(String address, String dataPointer) async {
   final response = await http.get(Uri.parse('http://' + address + ':5000/api/tokens?id=' + dataPointer));
@@ -200,6 +201,20 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: () {
               print('Button Pressed');
             })),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: ElevatedButton.icon(
+                    icon: const Icon(
+                      Icons.add_a_photo,
+                      color: Colors.white,
+                      size: 30.0,),
+                    label: const Text('Show Token List'),
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const TokenList()));
+                    })),
             ElevatedButton.icon(
             icon: const Icon(
               Icons.add,
