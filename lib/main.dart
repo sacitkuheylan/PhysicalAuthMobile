@@ -2,22 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-Future<User> fetchData() async {
-  final response = await http.get(Uri.parse('http://192.168.1.38:5000'));
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return User.fromJson(jsonDecode(response.body));
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load user');
-  }
-}
-
-Future<SecretKeyDetail> fetchKeyData() async {
-  final response = await http.get(Uri.parse('http://192.168.2.85:5000/api/tokens?id=1'));
+Future<SecretKeyDetail> fetchKeyData(String address, String dataPointer) async {
+  final response = await http.get(Uri.parse('http://' + address + ':5000/api/tokens?id=' + dataPointer));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -33,7 +19,7 @@ Future<SecretKeyDetail> fetchKeyData() async {
 
 Future<SecretKeyDetail> sendSecretKey(
     String name, String secretKey, int digitCount) async {
-  final http.Response response = await http.post(Uri.parse('http://192.168.2.85:5000/api/tokens'),
+  final http.Response response = await http.post(Uri.parse('http://192.168.2.75:5000/api/tokens'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -75,13 +61,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Physical Auth'),
+      home: const MyHomePage(title: 'Physical Auth', address: "192.168.1.44",),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key, required this.title, required this.address}) : super(key: key);
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
@@ -92,6 +78,7 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
+  final String address;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -151,7 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    keyDetail = fetchKeyData();
+    keyDetail = fetchKeyData(widget.address, "3");
   }
 
   @override
@@ -169,7 +156,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text(widget.address),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -184,23 +171,43 @@ class _MyHomePageState extends State<MyHomePage> {
             Container(
                 margin: const EdgeInsets.only(left: 25, right: 25),
                 child: TextField(
+                  autocorrect: false,
                   controller: nameController,
                   decoration: const InputDecoration(hintText: "Name"),
                 )),
             Container(
                 margin: const EdgeInsets.only(left: 25, right: 25),
                 child: TextField(
+                  autocorrect: false,
                   controller: secretKeyController,
                   decoration: const InputDecoration(hintText: "Secret Key"),
                 )),
             Container(
                 margin: const EdgeInsets.only(left: 25, right: 25),
                 child: TextField(
+                  autocorrect: false,
                   controller: digitCountController,
                   decoration: const InputDecoration(hintText: "Digit Count"),
                 )),
-            ElevatedButton(onPressed: () async {
-              final http.Response response = await http.post(Uri.parse('http://192.168.2.85:5000/api/tokens'),
+            Padding(
+                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                child: ElevatedButton.icon(
+                icon: const Icon(
+                Icons.add_a_photo,
+                color: Colors.white,
+                size: 30.0,),
+                label: const Text('Add token via QR Code'),
+            onPressed: () {
+              print('Button Pressed');
+            })),
+            ElevatedButton.icon(
+            icon: const Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 30.0,),
+              label: const Text("Add token"),
+             onPressed: () async {
+              final http.Response response = await http.post(Uri.parse('http://' + widget.address + ':5000/api/tokens'),
                 headers: <String, String>{
                   'Content-Type': 'application/json; charset=UTF-8',
                 },
@@ -211,7 +218,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 }),
               );
             },
-            child: const Text('Add new token'),
             ),
             FutureBuilder<SecretKeyDetail>(
                 future: keyDetail,

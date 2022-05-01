@@ -21,13 +21,18 @@ class WelcomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            const Text("PhysicalAuth",
+            style: TextStyle(
+            fontSize: 35,
+        )),
             Container(
-                margin: const EdgeInsets.all(10),
+                margin: const EdgeInsets.fromLTRB(0, 70, 0, 70),
                 child: Image.network(
                     "https://i.ibb.co/ynPmwsD/Physical-Auth-Logo.png")),
              Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: TextField(
+                  autocorrect: false,
                   controller: ipController,
                   decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -39,7 +44,7 @@ class WelcomePage extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => MyHomePage(title: "PhysicalAuth")));
+                        builder: (context) => MyHomePage(title: "PhysicalAuth", address: ipController.text,)));
               },
               child: const Text('Connect to Device'),
             ),
