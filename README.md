@@ -19,7 +19,6 @@ Hi! :wave: Thank you for your interest in **PhysicalAuth**. This page contains i
  - [Requirements](#requirements)
  - [Getting Ready](#getting-ready)
  - [Gallery](#gallery)
- - [State Diagram of PhysicalAuth Mobile Application](#state-diagram-of-physicalauth-mobile-application)
  - [Contribution](#contribution)
  - [LICENSE](#license)
 
@@ -46,11 +45,6 @@ Mobile application is developed using **Flutter** to provide cross-platform supp
 # Getting Ready
 Currently the application is at development phase and it is not available through Google Play Store or App Store. It is planned to be live on Google Play Store initially. If you don't want to wait, you can clone this project and build project. With this way you will have access to version alpha.
 
-
-# State Diagram of PhysicalAuth Mobile Application
-The state diagram below shows how PhysicalAuth Mobile Application Works
-
-> State Diagram of PhysicalAuth Mobile Application
 
 # Gallery
 <p align="center" href="https://ibb.co/Vj2DCGX"><img width="290" height="633" src="https://i.ibb.co/WxgFzXS/s2.png" alt="s2" border="0"></p>
