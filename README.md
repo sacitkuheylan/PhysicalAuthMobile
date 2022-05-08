@@ -10,6 +10,7 @@ Hi! :wave: Thank you for your interest in **PhysicalAuth**. This page contains i
 
 
 :warning:**Disclaimer**: This project is still in development and in alpha phase, not all features are available at the moment. General information about **PhysicalAuth** project is available at [PhysicalAuth Main Repository](https://www.github.com/sacitkuheylan/PhysicalAuth)
+
 **Expected beta relase date: :date: 20.05.2022**
 
 # Table of Contents
@@ -18,8 +19,9 @@ Hi! :wave: Thank you for your interest in **PhysicalAuth**. This page contains i
  - [Requirements](#requirements)
  - [Getting Ready](#getting-ready)
  - [Gallery](#gallery)
+ - [State Diagram of PhysicalAuth Mobile Application](#state-diagram-of-physicalauth-mobile-application)
  - [Contribution](#contribution)
- - [LICENSES](#licenses)
+ - [LICENSE](#license)
 
 
 
@@ -48,7 +50,20 @@ Currently the application is at development phase and it is not available throug
 # State Diagram of PhysicalAuth Mobile Application
 The state diagram below shows how PhysicalAuth Mobile Application Works
 
+> State Diagram of PhysicalAuth Mobile Application
+
 # Gallery
+<p align="center" href="https://ibb.co/Vj2DCGX"><img width="290" height="633" src="https://i.ibb.co/WxgFzXS/s2.png" alt="s2" border="0"></p>
+
+> Main screen, you need to enter the IP adress located on OLED Screen of device
+
+<p align="center" href="https://ibb.co/PQPxC5j"><img width="290" height="633" src="https://i.ibb.co/BNQLsg3/s1.png" alt="s1" border="0"></p>
+
+> In this screen you can add new token via entering details. Adding tokens with QR Code is still in development
+
+<p align="center" href="https://ibb.co/fQSpk4b"><img width="290" height="633" src="https://i.ibb.co/QXcNPrZ/s3.png" alt="s3" border="0"></p>
+
+> List of all registered tokens on device
 
 # Contribution
 Everybody who is passionate about developing information security and also software is welcome to make contributions. You can open a pull request and write a summary about your contribution.
