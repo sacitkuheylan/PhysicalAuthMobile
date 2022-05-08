@@ -18,7 +18,6 @@ Hi! :wave: Thank you for your interest in **PhysicalAuth**. This page contains i
  - [Requirements](#requirements)
  - [Getting Ready](#getting-ready)
  - [Gallery](#gallery)
- - [State Diagram of PhysicalAuth Mobile Application](#state-diagram-of-physicalauth-mobile-application)
  - [Contribution](#contribution)
  - [LICENSES](#licenses)
 
@@ -48,8 +47,6 @@ Currently the application is at development phase and it is not available throug
 
 # State Diagram of PhysicalAuth Mobile Application
 The state diagram below shows how PhysicalAuth Mobile Application Works
-
-> State Diagram of PhysicalAuth Mobile Application
 
 # Gallery
 
