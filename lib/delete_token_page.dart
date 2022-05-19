@@ -1,10 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:physical_auth/delete_token_page.dart';
-import 'package:physical_auth/token_list.dart';
-
-import 'add_token_page.dart';
 
 Future<SecretKeyDetail> fetchKeyData(String address, String dataPointer) async {
   final response = await http.get(Uri.parse('http://' + address + ':5000/api/tokens?id=' + dataPointer));
@@ -42,11 +38,11 @@ Future<SecretKeyDetail> sendSecretKey(
 
 
 void main() {
-  runApp(const MyApp());
+  runApp(const DeleteToken());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class DeleteToken extends StatelessWidget {
+  const DeleteToken({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -65,13 +61,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Physical Auth', address: "192.168.1.44",),
+      home: const DeleteTokenPage(title: 'Physical Auth', address: "192.168.2.85",),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title, required this.address}) : super(key: key);
+class DeleteTokenPage extends StatefulWidget {
+  const DeleteTokenPage({Key? key, required this.title, required this.address}) : super(key: key);
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
@@ -85,7 +81,7 @@ class MyHomePage extends StatefulWidget {
   final String address;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<DeleteTokenPage> createState() => _DeleteTokenPageState();
 
 }
 class User {
@@ -131,11 +127,8 @@ class Device {
   const Device({required this.devipAddress});
 }
 
-void postKeyData() {
 
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _DeleteTokenPageState extends State<DeleteTokenPage> {
   late Future<User> newUser;
   late Future<SecretKeyDetail> keyDetail;
 
@@ -153,9 +146,38 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    final nameController = TextEditingController();
-    final secretKeyController = TextEditingController();
-    final digitCountController = TextEditingController();
+
+
+    Future<void> _showMyDialog() async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('AlertDialog Title'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: const <Widget>[
+                  Text('This is a demo alert dialog.'),
+                  Text('Would you like to approve of this message?'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Approve'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+
+    final idController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
@@ -169,73 +191,43 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-                margin: const EdgeInsets.all(10),
-                child:
-                Padding(
-                    padding: const EdgeInsets.fromLTRB(0,0,0,50),
-                    child: Image.network(
-                        "https://i.ibb.co/ynPmwsD/Physical-Auth-Logo.png"))),
-            const Padding(padding: EdgeInsets.fromLTRB(0,0,0,10),
-                child: Text("Welcome to PhysicalAuth Main Page!", style: TextStyle(
-                  fontSize: 18.0,
-                ),)),
-            const Padding(padding: EdgeInsets.fromLTRB(0,0,0,10),
-                child: Text("From this page you can", style: TextStyle(
-                  fontSize: 18.0,
-                ),)),
-            const Padding(padding: EdgeInsets.fromLTRB(0,0,0,10),
-                child: Text("-List your tokens", style: TextStyle(
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold,
-                ),)),
-            const Padding(padding: EdgeInsets.fromLTRB(0,0,0,10),
-                child: Text("-Add new tokens", style: TextStyle(
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold,
-                ),)),
-            const Padding(padding: EdgeInsets.fromLTRB(0,0,0,10),
-                child: Text("-Delete tokens", style: TextStyle(
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold,
-                ),)),
-            Padding(
-                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                child: ElevatedButton.icon(
-                    icon: const Icon(
-                      Icons.list,
-                      color: Colors.white,
-                      size: 30.0,),
-                    label: const Text('Token List'),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const TokenList()));
-                    })),
+                margin: const EdgeInsets.fromLTRB(0,0,0,175),
+                child: Image.network(
+                    "https://i.ibb.co/ynPmwsD/Physical-Auth-Logo.png")),
+            Container(
+                margin: const EdgeInsets.only(left: 25, right: 25),
+                child: TextField(
+                  autocorrect: false,
+                  controller: idController,
+                  decoration: const InputDecoration(hintText: "#id of token to delete"),
+                )),
             ElevatedButton.icon(
               icon: const Icon(
                 Icons.add,
                 color: Colors.white,
                 size: 30.0,),
-              label: const Text("Add token"),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AddToken()));
-              },
-            ),
-            ElevatedButton.icon(
-              icon: const Icon(
-                Icons.delete,
-                color: Colors.white,
-                size: 30.0,),
               label: const Text("Delete token"),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const DeleteToken()));
+              onPressed: () async {
+                final http.Response response = await http.delete(Uri.parse('http://' + widget.address + ':5000/api/tokens' + '?id=' + idController.text),
+                  headers: <String, String>{
+                    'Content-Type': 'application/json; charset=UTF-8',
+                  },
+                );
+                if (response.statusCode == 200) {
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('Deleted Successfully!'),
+                      content: Text("Token id #" + idController.text + " deleted successfully!"),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'OK'),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
             ),
           ],

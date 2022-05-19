@@ -7,7 +7,7 @@ import 'package:physical_auth/token_model.dart';
 
 Future<List<Token>> fetchPost() async {
   final response =
-  await http.get(Uri.parse('http://192.168.2.179:5000/api/tokens'));
+  await http.get(Uri.parse('http://192.168.2.85:5000/api/tokens'));
   if (response.statusCode == 200) {
     final parsed = json.decode(response.body).cast<Map<String, dynamic>>();
 
@@ -63,15 +63,22 @@ class _MyAppState extends State<TokenList> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text("Key ID: " + snapshot.data![index].id.toString(),
+                        style: const TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),),
                       Text(
-                        snapshot.data![index].name,
+                        "Name: " + snapshot.data![index].name,
                         style: const TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(height: 10),
-                      Text(snapshot.data![index].secretKey),
+                      Text("Secret Key (Base64): " + snapshot.data![index].secretKey, style: const TextStyle(
+                        fontSize: 15.0,
+                      ),),
                     ],
                   ),
                 ),

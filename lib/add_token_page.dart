@@ -1,10 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:physical_auth/delete_token_page.dart';
 import 'package:physical_auth/token_list.dart';
-
-import 'add_token_page.dart';
 
 Future<SecretKeyDetail> fetchKeyData(String address, String dataPointer) async {
   final response = await http.get(Uri.parse('http://' + address + ':5000/api/tokens?id=' + dataPointer));
@@ -42,11 +39,11 @@ Future<SecretKeyDetail> sendSecretKey(
 
 
 void main() {
-  runApp(const MyApp());
+  runApp(const AddToken());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class AddToken extends StatelessWidget {
+  const AddToken({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -65,13 +62,13 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Physical Auth', address: "192.168.1.44",),
+      home: const AddTokenPage(title: 'Physical Auth', address: "192.168.2.85",),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title, required this.address}) : super(key: key);
+class AddTokenPage extends StatefulWidget {
+  const AddTokenPage({Key? key, required this.title, required this.address}) : super(key: key);
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
@@ -85,7 +82,7 @@ class MyHomePage extends StatefulWidget {
   final String address;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<AddTokenPage> createState() => _TokenPageState();
 
 }
 class User {
@@ -135,7 +132,7 @@ void postKeyData() {
 
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _TokenPageState extends State<AddTokenPage> {
   late Future<User> newUser;
   late Future<SecretKeyDetail> keyDetail;
 
@@ -170,74 +167,60 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             Container(
                 margin: const EdgeInsets.all(10),
-                child:
-                Padding(
-                    padding: const EdgeInsets.fromLTRB(0,0,0,50),
-                    child: Image.network(
-                        "https://i.ibb.co/ynPmwsD/Physical-Auth-Logo.png"))),
-            const Padding(padding: EdgeInsets.fromLTRB(0,0,0,10),
-                child: Text("Welcome to PhysicalAuth Main Page!", style: TextStyle(
-                  fontSize: 18.0,
-                ),)),
-            const Padding(padding: EdgeInsets.fromLTRB(0,0,0,10),
-                child: Text("From this page you can", style: TextStyle(
-                  fontSize: 18.0,
-                ),)),
-            const Padding(padding: EdgeInsets.fromLTRB(0,0,0,10),
-                child: Text("-List your tokens", style: TextStyle(
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold,
-                ),)),
-            const Padding(padding: EdgeInsets.fromLTRB(0,0,0,10),
-                child: Text("-Add new tokens", style: TextStyle(
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold,
-                ),)),
-            const Padding(padding: EdgeInsets.fromLTRB(0,0,0,10),
-                child: Text("-Delete tokens", style: TextStyle(
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold,
-                ),)),
-            Padding(
-                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                child: ElevatedButton.icon(
-                    icon: const Icon(
-                      Icons.list,
-                      color: Colors.white,
-                      size: 30.0,),
-                    label: const Text('Token List'),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const TokenList()));
-                    })),
+                child: Image.network(
+                    "https://i.ibb.co/ynPmwsD/Physical-Auth-Logo.png")),
+            Container(
+                margin: const EdgeInsets.only(left: 25, right: 25),
+                child: TextField(
+                  autocorrect: false,
+                  controller: nameController,
+                  decoration: const InputDecoration(hintText: "Name"),
+                )),
+            Container(
+                margin: const EdgeInsets.only(left: 25, right: 25),
+                child: TextField(
+                  autocorrect: false,
+                  controller: secretKeyController,
+                  decoration: const InputDecoration(hintText: "Secret Key"),
+                )),
+            Container(
+                margin: const EdgeInsets.only(left: 25, right: 25),
+                child: TextField(
+                  autocorrect: false,
+                  controller: digitCountController,
+                  decoration: const InputDecoration(hintText: "Digit Count"),
+                )),
             ElevatedButton.icon(
               icon: const Icon(
                 Icons.add,
                 color: Colors.white,
                 size: 30.0,),
               label: const Text("Add token"),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AddToken()));
+              onPressed: () async {
+                final http.Response response = await http.post(Uri.parse('http://' + widget.address + ':5000/api/tokens'),
+                  headers: <String, String>{
+                    'Content-Type': 'application/json; charset=UTF-8',
+                  },
+                  body: jsonEncode(<String, String>{
+                    'secretKey': secretKeyController.text,
+                    'name': nameController.text,
+                    'digitCount': digitCountController.text
+                  }),
+                );
               },
             ),
-            ElevatedButton.icon(
-              icon: const Icon(
-                Icons.delete,
-                color: Colors.white,
-                size: 30.0,),
-              label: const Text("Delete token"),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const DeleteToken()));
-              },
-            ),
+            FutureBuilder<SecretKeyDetail>(
+                future: keyDetail,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Text(snapshot.data!.name + "\n" + snapshot.data!.secretKey + "\n" + snapshot.data!.digitCount.toString());
+                  } else if (snapshot.hasError) {
+                    return Text('${snapshot.error}');
+                  }
+
+                  // By default, show a loading spinner.
+                  return const CircularProgressIndicator();
+                })
           ],
         ),
       ),
