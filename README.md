@@ -50,15 +50,33 @@ Currently the application is at development phase and it is not available throug
 # Gallery
 <p align="center" href="https://ibb.co/Vj2DCGX"><img width="290" height="633" src="https://i.ibb.co/WxgFzXS/s2.png" alt="s2" border="0"></p>
 
-> Main screen, you need to enter the IP adress located on OLED Screen of device
+> Welcome screen, you need to enter the IP Address located on OLED Screen of device. After writing IP Address you can press button on device to start operation
 
-<p align="center" href="https://ibb.co/PQPxC5j"><img width="290" height="633" src="https://i.ibb.co/BNQLsg3/s1.png" alt="s1" border="0"></p>
+<p align="center" href="https://ibb.co/fQSpk4b"><img width="290" height="633" src="https://i.ibb.co/54bTH0Q/Simulator-Screen-Shot-i-Phone-13-2022-05-20-at-11-06-02.png" alt="s3" border="0"></p>
 
-> In this screen you can add new token via entering details. Adding tokens with QR Code is still in development
+> This is the Main Menu screen, from here you can select options to operate your device. These options are;
+	 - List Your Registered Tokens
+	 - Add New Token
+	 - Delete Previously Registered Tokens
+	 
+<p align="center" href="https://ibb.co/fQSpk4b"><img width="290" height="633" src="https://i.ibb.co/QXcNPrZ/s3.png" alt="s3" border="0"></p>
+
+> List of all registered tokens on device
 
 <p align="center" href="https://ibb.co/fQSpk4b"><img width="290" height="633" src="https://i.ibb.co/QXcNPrZ/s3.png" alt="s3" border="0"></p>
 
 > List of all registered tokens on device
+
+<p align="center" href="https://ibb.co/fQSpk4b"><img width="290" height="633" src="https://i.ibb.co/R0xfw76/Simulator-Screen-Shot-i-Phone-13-2022-05-20-at-11-06-10.png" alt="s3" border="0"></p>
+
+> From this page, you can add new tokens to your device. There are 3 fields has to be filled. They are;
+	 - Name: The name you want to give your token
+	 - Secret Key: Base64 Encoded Secret Key given by application or website
+	 - Digit Count: This is generally 6 by default but some applications or websites require 8 digits.
+
+<p align="center" href="https://ibb.co/fQSpk4b"><img width="290" height="633" src="https://i.ibb.co/ZSVHmJX/Simulator-Screen-Shot-i-Phone-13-2022-05-20-at-11-06-20.png" alt="s3" border="0"></p>
+
+>From this page, you can enter the id of the token to remove from your device
 
 # Contribution
 Everybody who is passionate about developing information security and also software is welcome to make contributions. You can open a pull request and write a summary about your contribution.
