@@ -58,8 +58,6 @@ Currently the application is at development phase and it is not available throug
 	 - List Your Registered Tokens
 	 - Add New Token
 	 - Delete Previously Registered Tokens
-	 
-<p align="center" href="https://ibb.co/fQSpk4b"><img width="290" height="633" src="https://i.ibb.co/QXcNPrZ/s3.png" alt="s3" border="0"></p>
 
 > List of all registered tokens on device
 
